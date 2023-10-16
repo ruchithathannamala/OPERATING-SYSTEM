@@ -1,0 +1,35 @@
+#include <stdio.h>
+int main() {
+    int burst_time[] = {4, 6, 8};  // Burst times for three processes
+    int num_processes = sizeof(burst_time) / sizeof(burst_time[0]);
+
+    int current_time = 0;
+
+    while (1) {
+        int all_processes_completed = 1;
+
+        for (int i = 0; i < num_processes; i++) {
+            if (burst_time[i] > 0) {
+                all_processes_completed = 0;
+
+                printf("Time %d: Process %d is running (remaining time: %d)\n",
+                       current_time, i + 1, burst_time[i]);
+
+                if (burst_time[i] <= TIME_QUANTUM) {
+                    current_time += burst_time[i];
+                    burst_time[i] = 0;
+                } else {
+                    current_time += TIME_QUANTUM;
+                    burst_time[i] -= TIME_QUANTUM;
+                }
+            }
+        }
+
+        if (all_processes_completed)
+            break;
+    }
+
+    printf("All processes have completed execution.\n");
+
+    return 0;
+}
